@@ -1,10 +1,70 @@
 #include <iostream>
-#include <vector>
 #include <cstdlib>
 #include <ctime>
 #include "winlix.h"
 
 using namespace std;
+
+//Linked List Classes
+class SinglyLinkedListNode {
+    public:
+        int x, y;
+        SinglyLinkedListNode *next;
+
+        SinglyLinkedListNode(int x, int y) {
+            this->x = x;
+            this->y = y;
+            this->next = nullptr;
+        }
+};
+
+class SinglyLinkedList {
+    public:
+        SinglyLinkedListNode *head;
+        SinglyLinkedListNode *tail;
+
+        SinglyLinkedList() {
+            this->head = nullptr;
+            this->tail = nullptr;
+        }
+
+        void insert_node(int x, int y) {
+            SinglyLinkedListNode* node = new SinglyLinkedListNode(x, y);
+
+            if (!this->head) {
+                this->head = node;
+            } else {
+                this->tail->next = node;
+            }
+
+            this->tail = node;
+        }
+
+        void insert_node_at_head(int x, int y){
+            SinglyLinkedListNode* node = new SinglyLinkedListNode(x, y);
+
+            node->next = this->head;
+            this->head = node;
+        }
+
+        SinglyLinkedListNode* front(){
+            return this->head;
+        }
+
+        void pop_back(){
+            SinglyLinkedListNode* temp = this->head;
+            
+            while (temp->next != this->tail)
+            {
+                temp = temp->next;
+            }
+            
+            free(tail);
+
+            temp->next = NULL;
+            this->tail = temp;
+        }
+};
 
 // Game Variables
 int WIDTH = 80;
@@ -23,8 +83,8 @@ int maxscore_Medium = 0;
 int maxscore_Hard = 0;
 int snakeX, snakeY;
 bool GameStatus = true;
-vector<pair<int, int>> SnakeMap;
-const vector<string> DIRECTION = {"LEFT", "RIGHT", "UP", "DOWN", "STOP"};
+SinglyLinkedList SnakeMap;
+const char* DIRECTION[] = {"LEFT", "RIGHT", "UP", "DOWN", "STOP"};
 
 // All Function Declaration
 char SetUp();
@@ -101,7 +161,7 @@ public:
     {
         return y;
     }
-    vector<int> GenFood(bool bor = true)
+    void GenFood(bool bor = true)
     {
         if (bor)
         {
@@ -113,12 +173,6 @@ public:
                 if ((this->x != snakeX) && (this->y != snakeY))
                     break;
             }
-
-            vector<int> position;
-            position.push_back(this->x);
-            position.push_back(this->y);
-
-            return position;
         }
         else
         {
@@ -130,12 +184,6 @@ public:
                 if ((this->x != snakeX) && (this->y != snakeY))
                     break;
             }
-
-            vector<int> position;
-            position.push_back(this->x);
-            position.push_back(this->y);
-
-            return position;
         }
     }
 };
@@ -300,7 +348,7 @@ void Loading()
     cout << "Preparing Environment for Game..." << endl;
     s.setPosX(WIDTH / 2);
     s.setPosY(HEIGHT / 2);
-    SnakeMap.insert(SnakeMap.begin(), {WIDTH / 2, HEIGHT / 2});
+    SnakeMap.insert_node(WIDTH / 2, HEIGHT / 2);
     SleepFunction(450);
 
     cout << "Snake Is Coming..." << endl;
@@ -347,38 +395,43 @@ void KeyInput()
 
 void GameLogic_Easy()
 {
-    auto head = SnakeMap.front();
-    for (auto p : SnakeMap)
+    SinglyLinkedListNode* head = SnakeMap.front();
+    SinglyLinkedListNode* temp = head;
+    while(temp != NULL)
     {
-        if (s.getPosX() == p.first && s.getPosY() == p.second && score > 3)
+        if (s.getPosX() == temp->x && s.getPosY() == temp->y && score > 3)
         {
             GameStatus = false;
             return;
         }
+        temp = temp->next;
     }
 
     if (s.getPosX() >= WIDTH - 1)
     {
         s.setPosX(1);
-        SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+        SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
     }
     else if (s.getPosX() <= 0)
     {
         s.setPosX(WIDTH - 2);
-        SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+        SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
+
     }
     else if (s.getPosY() >= HEIGHT - 1)
     {
         s.setPosY(1);
-        SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+        SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
+
     }
     else if (s.getPosY() <= 0)
     {
         s.setPosY(HEIGHT - 2);
-        SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+        SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
+
     }
     else
-        SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+        SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
 
     if (s.getDir() == "UP")
         s.setPosY(s.getPosY() - 1);
@@ -403,17 +456,20 @@ void GameLogic_Easy()
 
 void GameLogic_Medium()
 {
-    auto head = SnakeMap.front();
-    for (auto p : SnakeMap)
+    SinglyLinkedListNode* head = SnakeMap.front();
+    SinglyLinkedListNode* temp = head;
+    while (temp != NULL)
     {
-        if (s.getPosX() == p.first && s.getPosY() == p.second && score > 3)
+        if (s.getPosX() == temp->x && s.getPosY() == temp->y && score > 3)
         {
             GameStatus = false;
             return;
         }
+
+        temp = temp->next;
     }
 
-    SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+    SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
 
     if (s.getDir() == "UP")
         s.setPosY(s.getPosY() - 1);
@@ -441,17 +497,20 @@ void GameLogic_Medium()
 
 void GameLogic_Hard()
 {
-    auto head = SnakeMap.front();
-    for (auto p : SnakeMap)
+    SinglyLinkedListNode* head = SnakeMap.front();
+    SinglyLinkedListNode* temp = head;
+    while (temp != NULL)
     {
-        if (s.getPosX() == p.first && s.getPosY() == p.second && score > 3)
+        if (s.getPosX() == temp->x && s.getPosY() == temp->y && score > 3)
         {
             GameStatus = false;
             return;
         }
+
+        temp = temp->next;
     }
 
-    SnakeMap.insert(SnakeMap.begin(), {s.getPosX(), s.getPosY()});
+    SnakeMap.insert_node_at_head(s.getPosX(), s.getPosY());
 
     if (s.getDir() == "UP")
         s.setPosY(s.getPosY() - 1);
@@ -502,20 +561,22 @@ void Draw(int m)
         for (int j = 0; j < WIDTH; j++)
         {
             bool eSnake = false;
-            for (auto p : SnakeMap)
+            SinglyLinkedListNode* temp = SnakeMap.head;
+            while(temp != NULL)
             {
-                if (SnakeMap.front() == p && p.first == j && p.second == i)
+                if (SnakeMap.front() == temp && temp->x == j && temp->y == i)
                 {
                     cout << SNAKE_HEAD;
                     eSnake = true;
                     break;
                 }
-                else if (p.first == j && p.second == i)
+                else if (temp->x == j && temp->y == i)
                 {
                     cout << SNAKE_TAIL;
                     eSnake = true;
                     break;
                 }
+                temp = temp->next;
             }
             if (!eSnake)
             {
@@ -589,20 +650,22 @@ void GameOver(int m)
         for (int j = 0; j < WIDTH; j++)
         {
             bool eSnake = false;
-            for (auto p : SnakeMap)
+            SinglyLinkedListNode* temp = SnakeMap.head;
+            while(temp != NULL)
             {
-                if (SnakeMap.front() == p && p.first == j && p.second == i)
+                if (SnakeMap.front() == temp && temp->x == j && temp->y == i)
                 {
                     cout << SNAKE_HEAD;
                     eSnake = true;
                     break;
                 }
-                else if (p.first == j && p.second == i)
+                else if (temp->x == j && temp->y == i)
                 {
                     cout << SNAKE_TAIL;
                     eSnake = true;
                     break;
                 }
+                temp = temp->next;
             }
             if (!eSnake)
             {
