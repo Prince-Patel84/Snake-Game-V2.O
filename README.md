@@ -12,6 +12,7 @@ This is a **classic Snake Game** built in C++ with additional features like mult
 - High-score tracking using `maxscore.txt`
 - Custom `winlix.h` library for optimized functionality
 - Classic Snake Game mechanics with smooth movement
+- Compatible with Linux and Windows Operating systems (Prefer Linux for better Performance)
 
 ## 🛠 Installation & Compilation
 ### Prerequisites
