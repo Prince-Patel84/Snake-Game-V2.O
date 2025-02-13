@@ -228,7 +228,7 @@ int main()
 
 char SetUp()
 {
-    ClearScreen();
+    ClearScreen(true);
     cout << "=======================================================================================================================================================================" << endl;
     cout << "000000000000000   0000       000        000000        000    000  000000000000000      00000000000          000000       0000                 00000   000000000000000  " << endl;
     cout << "000000000000000   00000      000       00000000       000   000   000000000000000     0000000000000        00000000      00000               000000   000000000000000  " << endl;
@@ -275,7 +275,7 @@ char SetUp()
 
 int MapSelection()
 {
-    ClearScreen();
+    ClearScreen(true);
     cout << "-----> Choose Your Favourite Map:" << endl;
     cout << "       ####################            $$$$$$$$$$$$$$$$$$$$           &&&&&&&&&&&&&&&&&&&&       " << endl;
     cout << "       #                  #            $                  $           &                **&       " << endl;
@@ -308,7 +308,7 @@ int MapSelection()
 
 void SnakeSelection()
 {
-    ClearScreen();
+    ClearScreen(true);
     cout << "-----> Choose Your Snake:" << endl;
     cout << "       ####################            $$$$$$$$$$$$$$$$$$$$           &&&&&&&&&&&&&&&&&&&&       " << endl;
     cout << "       #         ~~@      #            #         --O      #           #         ==0      #       " << endl;
@@ -342,7 +342,7 @@ void SnakeSelection()
 
 void Loading()
 {
-    ClearScreen();
+    ClearScreen(true);
 
     SleepFunction(450);
     cout << "Preparing Environment for Game..." << endl;
@@ -547,7 +547,7 @@ void GameLogic_Hard()
 
 void Draw(int m)
 {
-    ClearScreen();
+    ClearScreen(false);
 
     if (m == 1)
         cout << "Map: --Through The Walls--O" << endl;
@@ -628,7 +628,7 @@ void GameOver(int m)
     fprintf(file, "%d %d %d", maxscore_Easy, maxscore_Medium, maxscore_Hard);
     fclose(file);
 
-    ClearScreen();
+    ClearScreen(true);
 
     cout << "=====================================================================================================================================================================" << endl;
     cout << "         00000000000          000000       0000     0000  000000000000000            000000000     000                   000  000000000000000   000000000000         " << endl;
@@ -719,7 +719,7 @@ void GameOver(int m)
 
 void PlayAgain()
 {
-    ClearScreen();
+    ClearScreen(true);
     GameStatus = true;
     SnakeMap = {};
     s.setDir("STOP");

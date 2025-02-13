@@ -4,9 +4,16 @@
 #ifdef _WIN32
 #include <conio.h>
 #include <windows.h>
-void ClearScreen()
+void ClearScreen(bool full)
     {
+        if(full)
         system("cls");
+        else{
+            HANDLE hOut;
+            COORD Position = {0, 0};
+            hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+            SetConsoleCursorPosition(hOut, Position);
+        }
     }
 
     void SleepFunction(int milliseconds) {
@@ -63,7 +70,7 @@ int _kbhit()
     return 0;
 }
 
-    void ClearScreen()
+    void ClearScreen(bool full)
     {
         system("clear");
     }
